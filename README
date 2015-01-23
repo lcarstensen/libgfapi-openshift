@@ -1,0 +1,22 @@
+Python libgapi demo
+
+See: https://github.com/gluster/libgfapi-python
+and: http://blog.gluster.org/2014/04/play-with-libgfapi-and-its-python-bindings/
+
+
+To repro:
+
+rhc app create libgfapi python-2.6
+cd libgfapi
+git remote add repro https://github.com/lcarstensen/libgfapi-openshift.git
+git pull repro master
+./download-gfapi-libs.sh
+git add usr
+git push origin master
+rhc set-env GLUSTERSERVER=foo.example.com GLUSTERVOL=examplevol -a libgfapi
+# The following has no effect, but just proves the point that adjusting
+# LD_LIBRARY_PATH has no effect.
+export REPODIR=`rhc ssh libgfapi printenv OPENSHIFT_REPO_DIR`
+env set OPENSHIFT_GFAPI_LD_LIBRARY_PATH_ELEMENT=$REPODIR/usr/lib64:$REPODIR/usr/lib64/glusterfs/3.6.0.29/xlator/mount -a libgfapi
+
+rhc ssh libgfapi app-root/repo/example.py

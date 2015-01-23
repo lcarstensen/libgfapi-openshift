@@ -1,0 +1,3 @@
+[submodule "libgfapi-python"]
+	path = libgfapi-python
+	url = https://github.com/lcarstensen/libgfapi-python.git
